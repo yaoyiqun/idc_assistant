@@ -22,3 +22,9 @@ jobs:
     - run: flutter test
     - run: flutter config --enable-web
     - run: flutter build web
+    - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@master
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          BRANCH: gh-pages
+          FOLDER: build/web
