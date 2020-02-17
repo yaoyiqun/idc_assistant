@@ -176,7 +176,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-02-17T06:41:01.144050Z",
+  "generated": "2020-02-17T12:28:30.161305Z",
   "generator": "pub",
-  "generatorVersion": "2.7.0"
+  "generatorVersion": "2.8.0-dev.9.0.flutter-edd64e6d5c"
 }
