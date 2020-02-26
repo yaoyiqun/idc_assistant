@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:marquee/marquee.dart';
 
 void main() => runApp(MyApp());
 
@@ -7,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: '某音',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,92 +22,367 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(color: Colors.grey[500]),
+          child: Home(),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Container(
+            height: 60,
+            decoration: BoxDecoration(color: Colors.black),
+            child: BtmBar(),
+          ),
+        ),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class Home extends StatelessWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    return Stack(
+      children: <Widget>[
+        Positioned(
+          top: 0,
+          height: 120,
+          width: screenWidth,
+          child: Container(
+            //decoration: BoxDecoration(color: Colors.pinkAccent),
+            child: TopTab(),
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          width: 0.7 * screenWidth,
+          height: 120,
+          child: Container(
+            //decoration: BoxDecoration(color: Colors.redAccent),
+            child: BtnContext(),
+          ),
+        ),
+        Positioned(
+          right: 0,
+          height: 0.6 * screenHeight,
+          width: 0.2 * screenWidth,
+          top: 0.3 * screenHeight,
+          child: Container(
+            //decoration: BoxDecoration(color: Colors.grey),
+            child: ButtonList(),
+          ),
+        ),
+        Positioned(
+          bottom: 20,
+          //width: 0.25 * screenWidth,
+          //height: 0.25 * screenWidth,
+          right: 0,
+          child: Container(
+            //decoration: BoxDecoration(color: Colors.purpleAccent),
+            child: RotateAlbum(),
+          ),
+        )
+      ],
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class TopTab extends StatefulWidget {
+  @override
+  _TopTabState createState() => _TopTabState();
+}
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+class _TopTabState extends State<TopTab> with SingleTickerProviderStateMixin {
+  TabController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabController(vsync: this, length: 2, initialIndex: 1);
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Expanded(
+          flex: 2,
+          child: Icon(
+            Icons.search,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
+        Expanded(
+          flex: 8,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 50),
+            width: 240,
+            child: TabBar(
+              indicatorColor: Colors.white,
+              labelStyle: TextStyle(color: Colors.white, fontSize: 25,fontWeight: FontWeight.w800),
+              unselectedLabelStyle:
+                  TextStyle(color: Colors.grey[700], fontSize: 20),
+              controller: _controller,
+              tabs: <Widget>[
+                Text("关注"),
+                Text("推荐"),
+              ],
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Icon(
+            Icons.live_tv,
+            size: 30,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class BtmBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: <Widget>[
+          Text(
+            '首页',
+            style: TextStyle(color: Colors.white),
+          ),
+          Text(
+            '同城',
+            style: TextStyle(color: Colors.white),
+          ),
+          AddIcon(),
+          Text(
+            '消息',
+            style: TextStyle(color: Colors.white),
+          ),
+          Text(
+            '我',
+            style: TextStyle(color: Colors.white),
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
+    );
+  }
+}
+
+class AddIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 35,
+      width: 60,
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            height: 35,
+            width: 50,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.cyanAccent,
+                  borderRadius: BorderRadius.circular(7)),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+          ),
+          Positioned(
+            height: 35,
+            width: 50,
+            right: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.redAccent,
+                  borderRadius: BorderRadius.circular(10)),
             ),
-          ],
+          ),
+          Positioned(
+            height: 35,
+            width: 50,
+            right: 5,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(7)),
+              child: Icon(
+                Icons.add,
+                color: Colors.black,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class BtnContext extends StatelessWidget {
+  Widget _buildMarquee() {
+    return Marquee(
+      text: 'There once was a boy who told this story about a boy: "',
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          ListTile(
+            title: Text(
+              '@人民日报',
+              style: TextStyle(color: Colors.white),
+            ),
+            subtitle: Text(
+              'feawfjawelkfjawlfjaweffewafwaefawefawefawefawefawefawefawefwef,feawfjawelkfjawlfjaweffewafwaefawefawefawefawefawefawefawefwef',
+              style: TextStyle(color: Colors.white),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+          Row(
+            children: <Widget>[
+              SizedBox(
+                width: 10,
+              ),
+              Icon(Icons.music_note),
+              //_buildMarquee(),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class RotateAlbum extends StatefulWidget {
+  @override
+  _RotateAlbumState createState() => _RotateAlbumState();
+}
+
+class _RotateAlbumState extends State<RotateAlbum>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+  var animation;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(1),
+      child: animation,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+    animation = RotationTransition(
+      turns: Tween(begin: 0.0, end: 1.0).animate(_controller)
+        ..addStatusListener((status) {
+          if (status == AnimationStatus.completed) {
+            _controller.forward(from: 0.0);
+          }
+        }),
+      child: Container(
+        child: CircleAvatar(
+          backgroundImage: NetworkImage(
+              'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=2791362459,3529865990&fm=26&gp=0.jpg'),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    );
+    _controller.forward(from: 0.0);
+  }
+}
+
+class ButtonList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      // mainAxisSize:MainAxisSize.min,
+      //mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: <Widget>[
+        Container(
+          width: 45,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: 60,
+                height: 60,
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage(
+                      "https://dss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3256100974,305075936&fm=26&gp=0.jpg"),
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(7)),
+                  child: Icon(Icons.add),
+                ),
+              )
+            ],
+          ),
+        ),
+        IconText(
+          icon: Icon(
+            Icons.favorite_border,
+            size: 55,
+            color: Colors.redAccent,
+          ),
+          text: '999.5W',
+        ),
+        IconText(
+          icon: Icon(
+            Icons.feedback,
+            size: 55,
+            color: Colors.white,
+          ),
+          text: '999.5W',
+        ),
+        IconText(
+          icon: Icon(
+            Icons.reply,
+            size: 55,
+            color: Colors.white,
+          ),
+          text: '999.5W',
+        ),
+      ],
+    );
+  }
+}
+
+class IconText extends StatelessWidget {
+  const IconText({Key key, this.icon, this.text}) : super(key: key);
+  final Icon icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          icon,
+          Text(
+            text,
+            style: TextStyle(color: Colors.white),
+          )
+        ],
+      ),
     );
   }
 }
