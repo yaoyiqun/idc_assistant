@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:marquee/marquee.dart';
+import 'package:marquee_flutter/marquee_flutter.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,6 +44,7 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    double rpx = screenWidth / 750;
     return Stack(
       children: <Widget>[
         Positioned(
@@ -123,7 +124,10 @@ class _TopTabState extends State<TopTab> with SingleTickerProviderStateMixin {
             width: 240,
             child: TabBar(
               indicatorColor: Colors.white,
-              labelStyle: TextStyle(color: Colors.white, fontSize: 25,fontWeight: FontWeight.w800),
+              labelStyle: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w800),
               unselectedLabelStyle:
                   TextStyle(color: Colors.grey[700], fontSize: 20),
               controller: _controller,
@@ -224,11 +228,6 @@ class AddIcon extends StatelessWidget {
 }
 
 class BtnContext extends StatelessWidget {
-  Widget _buildMarquee() {
-    return Marquee(
-      text: 'There once was a boy who told this story about a boy: "',
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -253,7 +252,13 @@ class BtnContext extends StatelessWidget {
               SizedBox(
                 width: 10,
               ),
-              Icon(Icons.music_note),
+              Icon(Icons.music_note,color: Colors.white,),
+              Container(width: 200,
+              height: 20,
+              child: MarqueeWidget(text: '人民日报创作的一些比较有意思的东西',
+              textStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.white,fontSize: 16),
+              ),
+             ),
               //_buildMarquee(),
             ],
           )
